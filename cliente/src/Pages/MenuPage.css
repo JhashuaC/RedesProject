@@ -1,0 +1,22 @@
+body {
+  background-color: #6a99e4;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.menu-container {
+  background-color: #90aecd;
+  border-radius: 1rem;
+  max-width: 420px;
+  margin: 4rem auto;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
+}
+
+.buttons-display{
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* separación horizontal entre botones */
+    margin-top: 1rem;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "banco-nodejs-mysql",
+  "version": "1.0.0",
+  "main": "httpsServer.js",
+  "scripts": {
+    "start": "node httpsServer.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.21.2",
+    "mysql2": "^3.3.3"
+  }
+}
