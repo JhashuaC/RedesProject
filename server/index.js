@@ -9,32 +9,35 @@ const recibirRoutes = require('./controllers/recibirSinpeController');
 const db = require('./config/db'); // importa el pool
 
 const app = express();
-app.use(cors() );
+app.use(cors());
 app.use(express.json());
 
+// Rutas API
 app.use('/api', loginRoutes);
 app.use('/api', enviarRoutes);
 app.use('/api', recibirRoutes);
 
+// Certificados SSL
 const sslOptions = {
-  key: fs.readFileSync('./certs/key.pem'),
-  cert: fs.readFileSync('./certs/cert.pem')
+    key: fs.readFileSync('./certs/key.pem'),
+    cert: fs.readFileSync('./certs/cert.pem')
 };
 
+// Conexión a la base de datos
+db.getConnection()
+    .then(conn => {
+        console.log('✅ Conexión a la base de datos exitosa');
+        conn.release();
+    })
+    .catch(err => {
+        console.error('❌ Error al conectar con la base de datos:', err.message);
+    });
 
-app.get('/api/test-db', async (req, res) => {
-  try {
-    const conn = await db.getConnection();
-    const [rows] = await conn.query('SELECT NOW() AS now');
-    conn.release();
-    res.status(200).json({ status: 'OK', time: rows[0].now });
-  } catch (err) {
-    res.status(500).json({ status: 'ERROR', message: err.message });
-  }
-});
+// Host y puerto configurables
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '192.168.0.66';
 
-
-
-https.createServer(sslOptions, app).listen(5000, () => {
-  console.log('Servidor HTTPS corriendo en puerto 5000');
+// Servidor HTTPS
+https.createServer(sslOptions, app).listen(PORT, HOST, () => {
+    console.log(`Servidor HTTPS corriendo en https://${HOST}:${PORT}`);
 });
