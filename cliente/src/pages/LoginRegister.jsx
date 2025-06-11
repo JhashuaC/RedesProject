@@ -13,6 +13,12 @@ const LoginRegister = ({ setUsuarioLogueado }) => {
   const toggleModo = () => {
     setMensaje('');
     setModo(modo === 'login' ? 'register' : 'login');
+    setCedula('');
+    setPassword('');
+    setNombre('');
+    setPrimerApellido('');
+    setSegundoApellido('');
+    setNumero('');
   };
 
   const handleSubmit = async () => {
@@ -39,7 +45,6 @@ const LoginRegister = ({ setUsuarioLogueado }) => {
       const data = await res.json();
 
       if (res.ok) {
-        // Aquí asumimos que el backend devuelve al usuario logueado con al menos número y nombre
         setUsuarioLogueado(data.usuario);
       } else {
         setMensaje(data.message || 'Error en la operación');
@@ -50,76 +55,114 @@ const LoginRegister = ({ setUsuarioLogueado }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 border rounded shadow mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-center">{modo === 'login' ? 'Iniciar Sesión' : 'Registro'}</h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#0A1E3F] px-4">
+      <div className="bg-[#112B54] rounded-xl shadow-lg max-w-md w-full p-8 text-white">
+        <h2 className="text-3xl font-semibold mb-6 text-center select-none">
+          {modo === 'login' ? 'Iniciar Sesión' : 'Registro'}
+        </h2>
 
-      <div className="flex justify-center mb-6">
-        <button
-          onClick={toggleModo}
-          className="text-blue-600 hover:underline"
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={toggleModo}
+            className="text-[#74A9D8] hover:text-[#A3C1E0] transition-colors duration-300 font-medium underline focus:outline-none"
+            aria-label="Cambiar entre modo login y registro"
+          >
+            {modo === 'login' ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
+          </button>
+        </div>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+          className="space-y-5"
+          noValidate
         >
-          {modo === 'login' ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
-        </button>
+          <InputText
+            placeholder="Cédula"
+            value={cedula}
+            onChange={(e) => setCedula(e.target.value)}
+            autoFocus
+          />
+          <InputText
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          {modo === 'register' && (
+            <>
+              <InputText
+                placeholder="Nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+              />
+              <InputText
+                placeholder="Primer Apellido"
+                value={primerApellido}
+                onChange={(e) => setPrimerApellido(e.target.value)}
+              />
+              <InputText
+                placeholder="Segundo Apellido (opcional)"
+                value={segundoApellido}
+                onChange={(e) => setSegundoApellido(e.target.value)}
+              />
+              <InputText
+                placeholder="Número (8 dígitos)"
+                value={numero}
+                onChange={(e) => setNumero(e.target.value)}
+                maxLength={8}
+              />
+            </>
+          )}
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-[#1F3A73] hover:bg-[#2951A3] transition-colors rounded-lg text-lg font-semibold"
+          >
+            {modo === 'login' ? 'Entrar' : 'Registrarse'}
+          </button>
+        </form>
+
+        {mensaje && (
+          <p className="mt-5 text-center text-red-500 font-medium select-none">
+            {mensaje}
+          </p>
+        )}
       </div>
-
-      <input
-        type="text"
-        placeholder="Cédula"
-        value={cedula}
-        onChange={(e) => setCedula(e.target.value)}
-        className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-
-      {modo === 'register' && (
-        <>
-          <input
-            type="text"
-            placeholder="Nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            placeholder="Primer Apellido"
-            value={primerApellido}
-            onChange={(e) => setPrimerApellido(e.target.value)}
-            className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            placeholder="Segundo Apellido (opcional)"
-            value={segundoApellido}
-            onChange={(e) => setSegundoApellido(e.target.value)}
-            className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            placeholder="Número (8 dígitos)"
-            value={numero}
-            onChange={(e) => setNumero(e.target.value)}
-            className="w-full border rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </>
-      )}
-
-      <button
-        onClick={handleSubmit}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
-      >
-        {modo === 'login' ? 'Entrar' : 'Registrarse'}
-      </button>
-
-      {mensaje && <p className="mt-4 text-center text-red-600">{mensaje}</p>}
     </div>
   );
 };
+
+const InputText = ({ type = 'text', placeholder, value, onChange, autoFocus = false, maxLength }) => (
+  <input
+    type={type}
+    placeholder={placeholder}
+    value={value}
+    maxLength={maxLength}
+    autoFocus={autoFocus}
+    onChange={onChange}
+    className="
+      w-full
+      rounded-md
+      px-4
+      py-3
+      bg-[#153164]
+      border border-[#2C4E8C]
+      placeholder-[#8AA8D1]
+      text-white
+      focus:outline-none
+      focus:ring-2
+      focus:ring-[#3A5BA0]
+      transition
+      duration-300
+      shadow-sm
+      selection:bg-[#2C4E8C]
+      selection:text-white
+    "
+  />
+);
 
 export default LoginRegister;

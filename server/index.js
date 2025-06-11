@@ -6,6 +6,8 @@ const cors = require('cors');
 const loginRoutes = require('./controllers/loginController');
 const enviarRoutes = require('./controllers/enviarSinpeController');
 const recibirRoutes = require('./controllers/recibirSinpeController');
+const logsRoutes = require('./controllers/logController');
+const userController = require('./controllers/userController'); 
 const db = require('./config/db'); // importa el pool
 
 const app = express();
@@ -14,8 +16,11 @@ app.use(express.json());
 
 // Rutas API
 app.use('/api', loginRoutes);
+app.use('/api', userController);
 app.use('/api', enviarRoutes);
 app.use('/api', recibirRoutes);
+app.use('/api', logsRoutes);
+
 
 // Certificados SSL
 const sslOptions = {

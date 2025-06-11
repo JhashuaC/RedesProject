@@ -25,12 +25,26 @@ router.post('/registrar-log', async (req, res) => {
 });
 
 router.get('/logs', async (req, res) => {
+  const { numero } = req.query; // número del usuario para filtrar historial
   try {
-    const [rows] = await db.execute('SELECT * FROM log_transacciones ORDER BY fecha_transaccion DESC, id_transaccion DESC');
+    let query = 'SELECT * FROM log_transacciones';
+    const params = [];
+
+    if (numero) {
+      query += ' WHERE numero_emisor = ? OR numero_receptor = ?';
+      params.push(numero, numero);
+    }
+
+    query += ' ORDER BY fecha_transaccion DESC, id_transaccion DESC';
+
+    const [rows] = await db.execute(query, params);
     res.json(rows);
   } catch (error) {
+    console.error('Error al obtener logs:', error);
     res.status(500).json({ status: 'ERROR', message: 'Error al obtener los logs' });
   }
 });
+
+
 
 module.exports = router;
