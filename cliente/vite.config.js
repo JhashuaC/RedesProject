@@ -1,3 +1,4 @@
+// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -8,8 +9,9 @@ export default defineConfig({
       '/api': {
         target: 'https://localhost:3000',
         changeOrigin: true,
-        secure: false 
+        secure: false, 
+        // rewrite: (path) => path.replace(/^\/api/, '')  //NO usar esta línea
       }
     }
-  }
+  }  
 })

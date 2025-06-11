@@ -26,11 +26,11 @@ const sslOptions = {
 // Conexión a la base de datos
 db.getConnection()
     .then(conn => {
-        console.log('✅ Conexión a la base de datos exitosa');
+        console.log('Conexión a la base de datos exitosa');
         conn.release();
     })
     .catch(err => {
-        console.error('❌ Error al conectar con la base de datos:', err.message);
+        console.error('Error al conectar con la base de datos:', err.message);
     });
 
 // Host y puerto configurables
