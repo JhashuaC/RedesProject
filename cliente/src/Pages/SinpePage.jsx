@@ -103,7 +103,7 @@ const SinpePage = ({ usuario, onLogout }) => {
             </header>
 
             <section className="mb-12">
-                <h2 className="text-2xl font-semibold mb-5 select-none">Enviar dinero</h2>
+                <h2 className="text-2xl font-semibold mb-5 select-none">Enviar SINPE</h2>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <InputText
                         placeholder="Número destinatario (8 dígitos)"

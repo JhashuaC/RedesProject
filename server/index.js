@@ -40,7 +40,7 @@ db.getConnection()
 
 // Host y puerto configurables
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '192.168.0.72';
+const HOST =  '192.168.0.7';
 
 // Servidor HTTPS
 https.createServer(sslOptions, app).listen(PORT, HOST, () => {
