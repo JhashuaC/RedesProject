@@ -1,3 +1,4 @@
+// utils/dbUtils.js
 const db = require('../config/db');
 
 async function getUsuarioMonto(numero) {

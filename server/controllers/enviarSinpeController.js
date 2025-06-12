@@ -47,12 +47,20 @@ router.post('/enviar-sinpe', async(req, res) => {
             await registrarLogTransaccion(detalle, num_emisor, num_receptor, id_receptor, null, 'COMPLETADA: RECEPCIÓN INTERNA');
 
             return res.status(200).json({ status: 'OK', message: 'Transferencia completada' });
-        } else {
+        }
+        
+      
+            
+            
+            else{
+             
             try {
+
+
                 const infoBanco = await axios.get(`${API_KEY_URL}${prefijo_destino}`, {
                     httpsAgent: new(require('https').Agent)({ rejectUnauthorized: false })
                 });
-
+                
                 const banco = infoBanco.data;
                 const endpoint = `https://${banco.ip}:${banco.puerto}/${banco.endpoint}`;
 
@@ -64,6 +72,10 @@ router.post('/enviar-sinpe', async(req, res) => {
                     detalle
                 };
 
+                const emisor = await getUsuarioMonto(num_emisor);
+                if (emisor.usuario_monto < monto) {
+                return res.status(400).json({ status: 'ERROR', message: 'Fondos insuficientes' });
+                }
                 const response = await axios.post(endpoint, body, {
                     httpsAgent: new(require('https').Agent)({ rejectUnauthorized: false })
                 });
@@ -84,6 +96,9 @@ router.post('/enviar-sinpe', async(req, res) => {
                 return res.status(500).json({ status: 'ERROR', message: `Fallo al contactar API central o banco destino: ${err.message}` });
             }
         }
+
+
+
     } catch (e) {
         return res.status(500).json({ status: 'ERROR', message: `Error inesperado: ${e.message}` });
     }

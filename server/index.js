@@ -6,6 +6,8 @@ const cors = require('cors');
 const loginRoutes = require('./controllers/loginController');
 const enviarRoutes = require('./controllers/enviarSinpeController');
 const recibirRoutes = require('./controllers/recibirSinpeController');
+const logsRoutes = require('./controllers/logController');
+const userController = require('./controllers/userController'); 
 const db = require('./config/db'); // importa el pool
 
 const app = express();
@@ -14,8 +16,11 @@ app.use(express.json());
 
 // Rutas API
 app.use('/api', loginRoutes);
+app.use('/api', userController);
 app.use('/api', enviarRoutes);
 app.use('/api', recibirRoutes);
+app.use('/api', logsRoutes);
+
 
 // Certificados SSL
 const sslOptions = {
@@ -26,16 +31,16 @@ const sslOptions = {
 // Conexión a la base de datos
 db.getConnection()
     .then(conn => {
-        console.log('✅ Conexión a la base de datos exitosa');
+        console.log('Conexión a la base de datos exitosa');
         conn.release();
     })
     .catch(err => {
-        console.error('❌ Error al conectar con la base de datos:', err.message);
+        console.error('Error al conectar con la base de datos:', err.message);
     });
 
 // Host y puerto configurables
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '192.168.0.72';
+const HOST =  '192.168.0.7';
 
 // Servidor HTTPS
 https.createServer(sslOptions, app).listen(PORT, HOST, () => {
